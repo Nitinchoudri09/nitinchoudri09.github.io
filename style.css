@@ -95,6 +95,151 @@ ul {
     transform: translateY(-3px);
 }
 
+/* ===== Animated Resume Button ===== */
+.btn-resume-animated {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    color: #fff !important;
+    border: 2px solid transparent;
+    background:
+        linear-gradient(#0f172a, #0f172a) padding-box,
+        linear-gradient(135deg, #00d2ff, #9d50bb, #3a7bd5, #00d2ff) border-box;
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite, resumePulse 2.5s ease-in-out infinite;
+    margin-left: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
+    box-shadow:
+        0 0 12px rgba(0, 210, 255, 0.25),
+        0 0 24px rgba(157, 80, 187, 0.2);
+    z-index: 0;
+}
+
+/* Sweeping shine overlay */
+.btn-resume-animated .btn-shine {
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.22) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-20deg);
+    animation: shineSweep 2.8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Bounce download icon */
+.btn-resume-animated .btn-icon {
+    display: inline-block;
+    animation: iconBounce 1.4s ease-in-out infinite;
+    z-index: 2;
+}
+
+.btn-resume-animated .btn-text {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-resume-animated:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow:
+        0 0 20px rgba(0, 210, 255, 0.5),
+        0 0 40px rgba(157, 80, 187, 0.35),
+        0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.btn-resume-animated:active {
+    transform: translateY(-1px) scale(0.99);
+}
+
+/* Animated gradient border sweep */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Subtle pulsing glow */
+@keyframes resumePulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 10px rgba(0, 210, 255, 0.25),
+            0 0 22px rgba(157, 80, 187, 0.18);
+    }
+
+    50% {
+        box-shadow:
+            0 0 20px rgba(0, 210, 255, 0.55),
+            0 0 42px rgba(157, 80, 187, 0.4);
+    }
+}
+
+/* Shine sweep animation */
+@keyframes shineSweep {
+    0% {
+        left: -75%;
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    60% {
+        left: 130%;
+        opacity: 1;
+    }
+
+    61% {
+        opacity: 0;
+    }
+
+    100% {
+        left: 130%;
+        opacity: 0;
+    }
+}
+
+/* Icon bounce */
+@keyframes iconBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-4px);
+    }
+
+    70% {
+        transform: translateY(2px);
+    }
+}
+
 /* Glassmorphism Card */
 .glass-card {
     background: var(--glass-bg);
@@ -509,6 +654,10 @@ ul {
 
 .skill-item i.fa-digital-ocean {
     color: #0080FF;
+}
+
+.skill-item i.fa-bootstrap {
+    color: #7952b3;
 }
 
 /* Responsive adjustments */
