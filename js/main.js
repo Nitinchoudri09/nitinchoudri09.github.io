@@ -247,4 +247,30 @@ document.addEventListener('DOMContentLoaded', () => {
     initParticles();
     animateParticles();
 
+    /* -----------------------------------------------
+       7. Project Card Click-to-Reveal Overlay
+    ----------------------------------------------- */
+    const projectCards = document.querySelectorAll('.project-card');
+
+    projectCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            const isActive = card.classList.contains('overlay-active');
+
+            // Close all other overlays first
+            projectCards.forEach(c => c.classList.remove('overlay-active'));
+
+            // Toggle this card (open if was closed, stay closed if was open)
+            if (!isActive) {
+                card.classList.add('overlay-active');
+            }
+        });
+    });
+
+    // Close overlay when clicking outside any project card
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.project-card')) {
+            projectCards.forEach(c => c.classList.remove('overlay-active'));
+        }
+    });
+
 });

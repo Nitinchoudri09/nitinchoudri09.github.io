@@ -819,6 +819,391 @@ ul {
     color: white;
 }
 
+/* ===== Click-to-Reveal Project Overlay ===== */
+
+/* Tap hint badge */
+.project-tap-hint {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    z-index: 2;
+    pointer-events: none;
+    animation: hintPulse 2.4s ease-in-out infinite;
+    transition: opacity 0.3s ease;
+}
+
+.project-tap-hint i {
+    font-size: 0.8rem;
+    color: #00d2ff;
+}
+
+/* Hide hint when overlay is open */
+.project-card.overlay-active .project-tap-hint {
+    opacity: 0;
+}
+
+/* Overlay panel */
+.project-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: rgba(10, 15, 30, 0.82);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px 16px 0 0;
+    z-index: 10;
+    /* Hidden state */
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+}
+
+/* Active state — triggered by JS adding .overlay-active to card */
+.project-card.overlay-active .project-overlay {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+/* Scale image subtly when overlay opens */
+.project-card.overlay-active .project-image img {
+    transform: scale(1.08);
+}
+
+.overlay-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+.overlay-btns {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Stagger buttons into view */
+.project-card.overlay-active .overlay-btns .btn-livecode {
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+.project-card.overlay-active .overlay-btns .btn-liveapp {
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.22s both;
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.7) translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Hint pulse */
+@keyframes hintPulse {
+
+    0%,
+    100% {
+        opacity: 0.75;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+
+
+/* Project Links & Live Code Button */
+.project-links {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn-livecode {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #00d2ff;
+    border: 1.5px solid rgba(0, 210, 255, 0.45);
+    background: rgba(0, 210, 255, 0.06);
+    text-decoration: none;
+    overflow: hidden;
+    transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    animation: liveCodePulse 3s ease-in-out infinite;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+}
+
+/* Animated sweep shimmer */
+.btn-livecode::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            rgba(0, 210, 255, 0) 0%,
+            rgba(0, 210, 255, 0.18) 50%,
+            rgba(0, 210, 255, 0) 100%);
+    transform: skewX(-20deg);
+    animation: liveCodeShine 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.lc-bracket {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #00d2ff;
+    display: inline-block;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+    font-family: 'Poppins', monospace;
+    animation: bracketBob 2s ease-in-out infinite;
+}
+
+.lc-text {
+    position: relative;
+    z-index: 1;
+}
+
+.lc-icon {
+    font-size: 1rem;
+    transition: transform 0.4s ease;
+    position: relative;
+    z-index: 1;
+}
+
+/* Hover state */
+.btn-livecode:hover {
+    color: #fff;
+    background: rgba(0, 210, 255, 0.18);
+    border-color: #00d2ff;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+        0 0 16px rgba(0, 210, 255, 0.45),
+        0 0 32px rgba(0, 210, 255, 0.2),
+        0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.btn-livecode:hover .lc-bracket {
+    transform: translateX(-3px) rotate(-10deg);
+    text-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
+}
+
+.btn-livecode:hover .lc-icon {
+    transform: rotate(360deg);
+}
+
+.btn-livecode:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Pulsing border glow */
+@keyframes liveCodePulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 6px rgba(0, 210, 255, 0.15),
+            0 0 12px rgba(0, 210, 255, 0.08);
+    }
+
+    50% {
+        box-shadow:
+            0 0 14px rgba(0, 210, 255, 0.4),
+            0 0 28px rgba(0, 210, 255, 0.2);
+    }
+}
+
+/* Shimmer sweep */
+@keyframes liveCodeShine {
+    0% {
+        left: -80%;
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    60% {
+        left: 130%;
+        opacity: 1;
+    }
+
+    61% {
+        opacity: 0;
+    }
+
+    100% {
+        left: 130%;
+        opacity: 0;
+    }
+}
+
+/* Bracket bob */
+@keyframes bracketBob {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    45% {
+        transform: translateY(-3px);
+    }
+
+    70% {
+        transform: translateY(1.5px);
+    }
+}
+
+/* Live App Button */
+.btn-liveapp {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #c084fc;
+    border: 1.5px solid rgba(157, 80, 187, 0.45);
+    background: rgba(157, 80, 187, 0.06);
+    text-decoration: none;
+    overflow: hidden;
+    transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    animation: liveAppPulse 3.2s ease-in-out infinite;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+}
+
+/* Shimmer sweep for liveapp */
+.btn-liveapp::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            rgba(192, 132, 252, 0) 0%,
+            rgba(192, 132, 252, 0.18) 50%,
+            rgba(192, 132, 252, 0) 100%);
+    transform: skewX(-20deg);
+    animation: liveAppShine 3.2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.la-icon {
+    font-size: 0.95rem;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    z-index: 1;
+}
+
+.la-text {
+    position: relative;
+    z-index: 1;
+}
+
+/* Hover state */
+.btn-liveapp:hover {
+    color: #fff;
+    background: rgba(157, 80, 187, 0.2);
+    border-color: #c084fc;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+        0 0 16px rgba(192, 132, 252, 0.45),
+        0 0 32px rgba(157, 80, 187, 0.22),
+        0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.btn-liveapp:hover .la-icon {
+    transform: translateY(-5px) translateX(3px) rotate(-45deg);
+}
+
+.btn-liveapp:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Pulsing glow for Live App */
+@keyframes liveAppPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 6px rgba(192, 132, 252, 0.12),
+            0 0 12px rgba(157, 80, 187, 0.08);
+    }
+
+    50% {
+        box-shadow:
+            0 0 14px rgba(192, 132, 252, 0.38),
+            0 0 28px rgba(157, 80, 187, 0.2);
+    }
+}
+
+/* Shimmer sweep for Live App */
+@keyframes liveAppShine {
+    0% {
+        left: -80%;
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    60% {
+        left: 130%;
+        opacity: 1;
+    }
+
+    61% {
+        opacity: 0;
+    }
+
+    100% {
+        left: 130%;
+        opacity: 0;
+    }
+}
+
 /* Experience Section */
 /* Experience Section - New Vertical Timeline */
 .experience-timeline {
