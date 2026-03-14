@@ -150,102 +150,119 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* -----------------------------------------------
-       6. Particle Background (Canvas)
+       6. 3D Cosmic Background (Three.js)
     ----------------------------------------------- */
     const canvas = document.getElementById('particles-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    if (typeof THREE !== 'undefined' && canvas) {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
 
-    let particlesArray;
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Handle resize
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        initParticles();
-    });
+        // 1. Starfield Particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 4000;
+        const posArray = new Float32Array(particlesCount * 3);
 
-    class Particle {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.directionX = (Math.random() * 0.4) - 0.2; // Speed X
-            this.directionY = (Math.random() * 0.4) - 0.2; // Speed Y
-            this.size = Math.random() * 2 + 1; // Size
-            this.color = '#00d2ff';
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 12;
         }
 
-        // Method to draw
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-            ctx.fillStyle = this.color;
-            ctx.fill();
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.008,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.7,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // 2. Central Nebula / Glowing Ring
+        const ringGeo = new THREE.TorusGeometry(1.8, 0.02, 16, 100);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0xcb6ce6, transparent: true, opacity: 0.3 });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        scene.add(ring);
+
+        // Secondary inner glowing ring
+        const ringGeo2 = new THREE.TorusGeometry(1.4, 0.01, 16, 100);
+        const ringMat2 = new THREE.MeshBasicMaterial({ color: 0x5b21b6, transparent: true, opacity: 0.2 });
+        const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+        scene.add(ring2);
+
+        // 3. Floating Orbital Shapes
+        const shapes = [];
+        const materialNodes = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.08 });
+
+        const node1 = new THREE.IcosahedronGeometry(0.8, 0);
+        const mesh1 = new THREE.Mesh(node1, materialNodes);
+        mesh1.position.set(-4, 1.5, -4);
+
+        const node2 = new THREE.OctahedronGeometry(0.6, 0);
+        const mesh2 = new THREE.Mesh(node2, materialNodes);
+        mesh2.position.set(4, -1.8, -3);
+
+        shapes.push(mesh1, mesh2);
+        scene.add(mesh1, mesh2);
+
+        camera.position.z = 4.5;
+
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            const elapsedTime = clock.getElapsedTime();
+
+            targetX = mouseX * 0.0005;
+            targetY = mouseY * 0.0005;
+
+            // Particles rotation
+            particlesMesh.rotation.y = elapsedTime * 0.03;
+
+            // Central rings animation
+            ring.rotation.x = elapsedTime * 0.2;
+            ring.rotation.y = elapsedTime * 0.15;
+            ring2.rotation.x = -elapsedTime * 0.15;
+            ring2.rotation.y = -elapsedTime * 0.2;
+
+            // Shapes rotation
+            shapes.forEach((shape, index) => {
+                shape.rotation.y = elapsedTime * (0.1 + index * 0.05);
+                shape.rotation.z = elapsedTime * (0.05);
+            });
+
+            // Parallax
+            camera.position.x += (mouseX * 0.0012 - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY * 0.0012 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
         }
-
-        // Method to update position
-        update() {
-            // Check canvas boundaries
-            if (this.x > canvas.width || this.x < 0) {
-                this.directionX = -this.directionX;
-            }
-            if (this.y > canvas.height || this.y < 0) {
-                this.directionY = -this.directionY;
-            }
-
-            // Move particle
-            this.x += this.directionX;
-            this.y += this.directionY;
-
-            // Draw particle
-            this.draw();
-        }
+        animate3D();
     }
-
-    // Connect particles with lines
-    function connect() {
-        let opacityValue = 1;
-        for (let a = 0; a < particlesArray.length; a++) {
-            for (let b = a; b < particlesArray.length; b++) {
-                let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
-                    ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-
-                if (distance < (canvas.width / 7) * (canvas.height / 7)) {
-                    opacityValue = 1 - (distance / 20000);
-                    ctx.strokeStyle = 'rgba(0, 210, 255,' + opacityValue + ')';
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                    ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                    ctx.stroke();
-                }
-            }
-        }
-    }
-
-    // Create particle array
-    function initParticles() {
-        particlesArray = [];
-        let numberOfParticles = (canvas.width * canvas.height) / 9000;
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
-    }
-
-    // Animation loop
-    function animateParticles() {
-        requestAnimationFrame(animateParticles);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-        }
-        connect();
-    }
-
-    initParticles();
-    animateParticles();
 
     /* -----------------------------------------------
        7. Project Card Click-to-Reveal Overlay
@@ -272,5 +289,28 @@ document.addEventListener('DOMContentLoaded', () => {
             projectCards.forEach(c => c.classList.remove('overlay-active'));
         }
     });
+
+    /* -----------------------------------------------
+       8. 3D Card Hover Effects (VanillaTilt)
+    ----------------------------------------------- */
+    if (typeof VanillaTilt !== 'undefined') {
+        const tiltElements = document.querySelectorAll(".glass-card, .project-card, .experience-card, .cert-card, .img-wrapper, .skill-category, .timeline-content");
+        VanillaTilt.init(tiltElements, {
+            max: 18,               // Max tilt rotation
+            speed: 400,            // Speed of the enter/exit transition
+            glare: true,           // Add a glare effect
+            "max-glare": 0.25,     // Max glare opacity
+            scale: 1.05            // Scale up on hover
+        });
+
+        // Disable tilt on small screens for better UX
+        if (window.innerWidth <= 768) {
+            tiltElements.forEach(el => {
+                if (el.vanillaTilt) {
+                    el.vanillaTilt.destroy();
+                }
+            });
+        }
+    }
 
 });
