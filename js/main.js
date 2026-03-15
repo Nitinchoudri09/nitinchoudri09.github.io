@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
         const particlesMaterial = new THREE.PointsMaterial({
             size: 0.008,
-            color: 0xcb6ce6, // Purple particles
+            color: 0xa855f7, // Electric Purple
             transparent: true,
             opacity: 0.8,
             blending: THREE.AdditiveBlending
@@ -259,13 +259,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. Central Nebula / Glowing Ring
         const ringGeo = new THREE.TorusGeometry(1.8, 0.02, 16, 100);
-        const ringMat = new THREE.MeshBasicMaterial({ color: 0xcb6ce6, transparent: true, opacity: 0.3 });
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.3 });
         const ring = new THREE.Mesh(ringGeo, ringMat);
         scene.add(ring);
 
         // Secondary inner glowing ring
         const ringGeo2 = new THREE.TorusGeometry(1.4, 0.01, 16, 100);
-        const ringMat2 = new THREE.MeshBasicMaterial({ color: 0x5b21b6, transparent: true, opacity: 0.2 });
+        const ringMat2 = new THREE.MeshBasicMaterial({ color: 0x6366f1, transparent: true, opacity: 0.2 });
         const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
         scene.add(ring2);
 
