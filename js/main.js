@@ -23,13 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Sticky Navbar Effect
+    // Sticky Navbar & Scroll Progress
+    const progressBarr = document.querySelector('.scroll-progress');
+
     window.addEventListener('scroll', () => {
+        // Navbar
         if (window.scrollY > 100) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
+
+        // Progress Bar
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        if (progressBarr) progressBarr.style.width = scrolled + "%";
     });
 
     // Active Link Highlighting
@@ -88,44 +97,110 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Start typing effect
-    setTimeout(type, 1000);
+    setTimeout(type, 1500);
+
+    /* -----------------------------------------------
+       2.5 Preloader Handling
+    ----------------------------------------------- */
+    window.addEventListener('load', () => {
+        const preloader = document.querySelector('.preloader');
+        setTimeout(() => {
+            preloader.classList.add('fade-out');
+            document.body.classList.add('loaded');
+
+            // Re-trigger scroll reveal for hero section specifically
+            setTimeout(() => {
+                document.querySelector('.hero').classList.add('active');
+            }, 400);
+        }, 800); // Artificial delay for premium feel
+    });
 
 
     /* -----------------------------------------------
-       3. Scroll Animations (Reveal)
+       3. Custom Cursor Logic
     ----------------------------------------------- */
-    // Helper: add 'reveal' class to elements with data-aos
-    const revealElements = document.querySelectorAll('[data-aos]');
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+    const interactiveElements = document.querySelectorAll('a, button, .btn, .project-card, .skill-item, .experience-card, .cert-card, .hamburger');
 
-    revealElements.forEach(el => {
-        const animationType = el.getAttribute('data-aos');
-        if (animationType === 'fade-up' || animationType === 'slide-up') {
-            el.classList.add('reveal');
-        } else if (animationType === 'fade-left') {
-            el.classList.add('reveal-left');
-        } else if (animationType === 'fade-right') {
-            el.classList.add('reveal-right');
-        }
+    window.addEventListener('mousemove', (e) => {
+        const posX = e.clientX;
+        const posY = e.clientY;
+
+        // Use requestAnimationFrame for smoother performance
+        requestAnimationFrame(() => {
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Animate outline with a slight delay
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
     });
 
-    const reveal = () => {
-        const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            document.body.classList.add('cursor-hover');
+        });
+        el.addEventListener('mouseleave', () => {
+            document.body.classList.remove('cursor-hover');
+        });
+    });
 
-        for (let i = 0; i < reveals.length; i++) {
-            const windowHeight = window.innerHeight;
-            const elementTop = reveals[i].getBoundingClientRect().top;
-            const elementVisible = 150;
+    /* -----------------------------------------------
+       4. Magnetic Button Effect
+    ----------------------------------------------- */
+    const magneticBtns = document.querySelectorAll('.btn-primary, .btn-resume-animated, .logo');
 
-            if (elementTop < windowHeight - elementVisible) {
-                reveals[i].classList.add('active');
-            } else {
-                // reveals[i].classList.remove('active'); // Optional: reset on scroll up
-            }
-        }
+    magneticBtns.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const position = btn.getBoundingClientRect();
+            const x = e.pageX - position.left - position.width / 2;
+            const y = e.pageY - position.top - position.height / 2;
+
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
+        });
+
+        btn.addEventListener('mouseout', () => {
+            btn.style.transform = 'translate(0, 0)';
+        });
+    });
+
+    /* -----------------------------------------------
+       5. Enhanced Scroll Animations (Staggered)
+    ----------------------------------------------- */
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
     };
 
-    window.addEventListener('scroll', reveal);
-    reveal(); // Trigger once on load
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+
+                // If it's a category or wrapper, handle children stagger
+                if (entry.target.classList.contains('skills-wrapper') ||
+                    entry.target.classList.contains('experience-timeline') ||
+                    entry.target.classList.contains('projects-grid')) {
+                    const children = entry.target.children;
+                    Array.from(children).forEach((child, index) => {
+                        setTimeout(() => {
+                            child.classList.add('active');
+                        }, index * 100);
+                    });
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Common reveal classes in CSS (will add below in CSS)
+    document.querySelectorAll('[data-aos], .project-card, .skill-category, .experience-item, .cert-card').forEach(el => {
+        el.classList.add('scroll-reveal');
+        scrollObserver.observe(el);
+    });
 
 
 
@@ -173,9 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
         const particlesMaterial = new THREE.PointsMaterial({
             size: 0.008,
-            color: 0xffffff,
+            color: 0xcb6ce6, // Purple particles
             transparent: true,
-            opacity: 0.7,
+            opacity: 0.8,
             blending: THREE.AdditiveBlending
         });
 
@@ -262,6 +337,16 @@ document.addEventListener('DOMContentLoaded', () => {
             renderer.render(scene, camera);
         }
         animate3D();
+
+        // Hero Image Parallax (Extra Depth)
+        const heroImg = document.querySelector('.img-wrapper');
+        if (heroImg) {
+            window.addEventListener('mousemove', (e) => {
+                const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+                const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+                heroImg.style.transform = `translate(${moveX}px, ${moveY}px) rotateX(${-moveY}deg) rotateY(${moveX}deg)`;
+            });
+        }
     }
 
     /* -----------------------------------------------
@@ -312,5 +397,50 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    /* -----------------------------------------------
+       9. Dynamic Card Glow Tracking
+    ----------------------------------------------- */
+    const glowCards = document.querySelectorAll('.glass-card, .project-card, .skill-category, .experience-card, .cert-card');
+
+    glowCards.forEach(card => {
+        // Inject glow element if not present
+        if (!card.querySelector('.card-glow')) {
+            const glow = document.createElement('div');
+            glow.classList.add('card-glow');
+            card.appendChild(glow);
+        }
+
+        card.addEventListener('mousemove', (e) => {
+            const glow = card.querySelector('.card-glow');
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            glow.style.left = `${x}px`;
+            glow.style.top = `${y}px`;
+        });
+    });
+
+    /* -----------------------------------------------
+       10. Social Icon Micro-animations
+    ----------------------------------------------- */
+    const socialIcons = document.querySelectorAll('.social-icons a');
+    socialIcons.forEach((icon, index) => {
+        icon.style.opacity = '0';
+        icon.style.transform = 'translateY(20px)';
+
+        // Appear with stagger when footer visible
+        const footerObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                setTimeout(() => {
+                    icon.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    icon.style.opacity = '1';
+                    icon.style.transform = 'translateY(0)';
+                }, index * 150);
+            }
+        });
+        footerObserver.observe(document.querySelector('.footer'));
+    });
 
 });

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Portfolio of Nitin Choudri - Computer Engineering Student & Python Developer">
-    <title>Nitin Choudri | Portfolio</title>
+    <title>My Portfolio</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,13 +21,35 @@
 </head>
 
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress"></div>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader-content">
+            <div class="loader-circle"></div>
+            <div class="loader-text">My Portfolio<span>.</span></div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Animated Background Blobs -->
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
     <!-- Canvas for Particle Background -->
     <canvas id="particles-canvas"></canvas>
 
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="#hero" class="logo">Nitin choudri<span>.</span></a>
+            <a href="#hero" class="logo">My Portfolio<span>.</span></a>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
@@ -47,9 +69,12 @@
     <section id="hero" class="hero">
         <div class="container hero-content">
             <div class="hero-text">
-                <h3 class="greeting">Hello, I'm</h3>
-                <h1 class="name">Nitin Choudri</h1>
-                <h2 class="title">Computer Engineering Student <br> <span class="typing-text">Python Developer</span>
+                <h3 class="greeting overflow-hidden"><span class="reveal-text">Hello, I'm</span></h3>
+                <h1 class="name overflow-hidden"><span class="reveal-text">Nitin Choudri</span></h1>
+                <h2 class="title overflow-hidden">
+                    <span class="reveal-text">Computer Engineering Student</span>
+                    <br>
+                    <span class="typing-text">Python Developer</span>
                 </h2>
 
                 <p class="intro-text">Dynamic and motivated fresher with strong computer skills, leadership qualities,
@@ -58,12 +83,15 @@
                 <div class="hero-btns">
                     <!-- Assuming a placeholder for resume download or # for now -->
 
+
                     <a href="nitin cv.pdf" download="nitin cv.pdf" class="btn btn-secondary btn-resume-animated"
                         id="resume-download-btn">
                         <span class="btn-text">Resume </span>
-                        <i class="fas fa-download btn-icon"></i>
-                        <span class="btn-shine"></span>
+
                     </a>
+
+
+
                 </div>
             </div>
             <div class="hero-image">
@@ -150,9 +178,7 @@
                         <div class="skill-item">
                             <i class="fab fa-bootstrap"></i> Bootstrap
                         </div>
-                        <div class="skill-item">
-                            <i class="fab fa-bootstrap"></i> Bootstrap
-                        </div>
+
                     </div>
                 </div>
 
@@ -192,7 +218,7 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-content glass-card">
                         <span class="date">2020 – 2022</span>
-                        <h3>Pre-University Course</h3>
+                        <h3>Pre-University </h3>
                         <h4>Shri Channabasaveshwar Gurukul, Bhalki</h4>
                         <p>Percentage: 79%</p>
                     </div>
@@ -343,8 +369,33 @@
             <h2 class="section-title" data-aos="fade-up">Experience & Certifications</h2>
 
             <div class="experience-timeline">
-                <!-- Experience Item New (2025) -->
+                <!-- Experience Item: Python & ML (2026) -->
                 <div class="experience-item" data-aos="fade-left">
+                    <div class="experience-dot"></div>
+                    <div class="experience-card">
+                        <div class="card-header">
+                            <div class="company-logo">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="role-info">
+                                <h3>Python & Machine Learning Intern</h3>
+                                <h4>Karunadu Technologies Pvt Ltd – Bangalore, India</h4>
+                                <span class="date">Feb 2026 – June 2026</span>
+                            </div>
+                        </div>
+                        <p>Completed hands-on training in Python programming and Machine Learning. Worked with
+                            algorithms like Linear Regression, SVM, Random Forest, and Naive Bayes. Focused on data
+                            preprocessing, feature selection, and model testing using Scikit-learn, Pandas, and NumPy.
+                            Integrated ML models into web applications using Django.</p>
+                        <div class="skills-used">
+                            <strong>Skills:</strong> Python • Machine Learning • Data Analysis • Model Training • Data
+                            Preprocessing • Django Integration • Pandas • NumPy • Scikit-learn
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Item 2 -->
+                <div class="experience-item" data-aos="fade-left" data-aos-delay="100">
                     <div class="experience-dot"></div>
                     <div class="experience-card">
                         <div class="card-header">
@@ -366,10 +417,8 @@
                     </div>
                 </div>
 
-
-
-                <!-- Experience Item 2 -->
-                <div class="experience-item" data-aos="fade-left" data-aos-delay="100">
+                <!-- Experience Item 3 -->
+                <div class="experience-item" data-aos="fade-left" data-aos-delay="200">
                     <div class="experience-dot"></div>
                     <div class="experience-card">
                         <div class="card-header">
@@ -390,8 +439,8 @@
                     </div>
                 </div>
 
-                <!-- Experience Item 3 -->
-                <div class="experience-item" data-aos="fade-left" data-aos-delay="200">
+                <!-- Experience Item 4 -->
+                <div class="experience-item" data-aos="fade-left" data-aos-delay="300">
                     <div class="experience-dot"></div>
                     <div class="experience-card">
                         <div class="card-header">
