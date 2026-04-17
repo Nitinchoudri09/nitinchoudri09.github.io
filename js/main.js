@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburger.addEventListener('click', () => {
         navLinks.classList.toggle('nav-active');
         hamburger.classList.toggle('toggle');
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = navLinks.classList.contains('nav-active') ? 'hidden' : '';
     });
 
     // Close mobile menu when a link is clicked
@@ -20,7 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', () => {
             navLinks.classList.remove('nav-active');
             hamburger.classList.remove('toggle');
+            document.body.style.overflow = '';
         });
+    });
+
+    // Close menu on resize if switching to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            navLinks.classList.remove('nav-active');
+            hamburger.classList.remove('toggle');
+            document.body.style.overflow = '';
+        }
     });
 
     // Sticky Navbar & Scroll Progress
@@ -45,18 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section');
     window.addEventListener('scroll', () => {
         let current = '';
+        const scrollPos = window.scrollY || window.pageYOffset;
+        
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
-            if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+            if (scrollPos >= (sectionTop - sectionHeight / 3)) {
                 current = section.getAttribute('id');
             }
         });
 
         navLinksItems.forEach(li => {
-            li.querySelector('a').classList.remove('active');
-            if (li.querySelector('a').getAttribute('href').includes(current)) {
-                li.querySelector('a').classList.add('active');
+            const link = li.querySelector('a');
+            link.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === current) {
+                link.classList.add('active');
             }
         });
     });
@@ -338,9 +353,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         animate3D();
 
-        // Hero Image Parallax (Extra Depth)
+        // Hero Image Parallax (Extra Depth) - Only on Desktop
         const heroImg = document.querySelector('.img-wrapper');
-        if (heroImg) {
+        if (heroImg && window.innerWidth > 1024) {
             window.addEventListener('mousemove', (e) => {
                 const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
                 const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
