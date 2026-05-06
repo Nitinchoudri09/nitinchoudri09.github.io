@@ -836,10 +836,11 @@ ul {
 }
 
 .title {
-    font-size: 2.2rem;
+    font-size: clamp(1.4rem, 5vw, 2.2rem);
     color: var(--text-color);
     font-weight: 700;
     margin-bottom: 30px;
+    min-height: 3.5em; /* Prevent layout shift when text wraps on mobile */
 }
 
 .typing-text {
