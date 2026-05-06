@@ -36,11 +36,16 @@
     }
 }
 
+html {
+    overscroll-behavior-y: none;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--darker-bg);
     color: var(--text-color);
     line-height: 1.6;
+    overscroll-behavior-y: none;
     overflow-x: hidden;
     /* Prevent scrolling during preloader */
     height: 100vh;
