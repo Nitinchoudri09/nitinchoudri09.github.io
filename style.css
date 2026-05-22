@@ -2098,3 +2098,64 @@ body::before {
     background: rgba(203, 108, 230, 0.3);
     color: #fff;
 }
+
+/* Orbiting Tech Logos */
+.orbit-ring {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    animation: rotateRing 15s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes rotateRing {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.tech-logo {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: var(--dark-bg);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    animation: counterRotateRing 15s linear infinite;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    margin: -25px; /* Offset to center on the ring edge */
+}
+
+.tech-logo i.fa-python { color: #3776ab; }
+.tech-logo i.fa-github { color: #ffffff; }
+.tech-logo i.fa-html5 { color: #e34f26; }
+.tech-logo i.fa-database { color: #f29111; }
+.tech-logo i.fa-java { color: #b07219; }
+.tech-logo i.fa-chart-bar { color: #f2c811; }
+
+/* Positioning 6 items evenly on the edge of the 100% ring */
+.python-logo { top: 0%; left: 50%; }
+.github-logo { top: 25%; left: 93.3%; }
+.html-logo { top: 75%; left: 93.3%; }
+.sql-logo { top: 100%; left: 50%; }
+.java-logo { top: 75%; left: 6.7%; }
+.powerbi-logo { top: 25%; left: 6.7%; }
+
+@keyframes counterRotateRing {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+}
+
+@media (max-width: 991px) {
+    .tech-logo {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        margin: -20px;
+    }
+}
