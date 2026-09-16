@@ -13,8 +13,11 @@ app.use(helmet());
 app.use(express.json({ limit: '10kb' }));
 
 // ─── CORS ─────────────────────────────────────────────────────
+// Production origin: https://nitinchoudri09.github.io
+// Dev origins: localhost variants for Live Server
 const allowedOrigins = [
   'https://nitinchoudri09.github.io',
+  // Local development (Live Server)
   'http://localhost:3000',
   'http://localhost:5500',
   'http://127.0.0.1:5500',
@@ -26,24 +29,17 @@ const allowedOrigins = [
   'http://127.0.0.1:5503',
   'http://localhost:5504',
   'http://127.0.0.1:5504',
-  // Local network – mobile devices on same WiFi
-  'http://172.20.10.2:5500',
-  'http://172.20.10.2:5501',
-  'http://172.20.10.2:5502',
-  'http://172.20.10.2:5503',
-  'http://172.20.10.2:5504',
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (curl, Postman, local file)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    // Allow no-origin requests (curl, Postman, Render health pings)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS: origin '${origin}' not allowed`));
   },
   methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
 }));
 
 // ─── Rate limiting: 20 requests per 15 minutes per IP ─────────
@@ -207,15 +203,27 @@ CAREER INTERESTS:
 
 // ─── Initialize Gemini ────────────────────────────────────────
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({
-  model: 'gemini-3.6-flash',
-  systemInstruction: SYSTEM_PROMPT,
-});
+
+function getModel(modelName) {
+  return genAI.getGenerativeModel({
+    model: modelName,
+    systemInstruction: SYSTEM_PROMPT,
+  });
+}
+
+// Primary model, fallback if primary is overloaded
+const PRIMARY_MODEL   = 'gemini-2.0-flash-lite';
+const FALLBACK_MODEL  = 'gemini-3.6-flash';
 
 // ─── Health check ──────────────────────────────────────────────
-app.get('/', (req, res) => {
-  res.json({ status: 'ok', message: "Nitin Choudri's Portfolio Chatbot API is running." });
-});
+const healthResponse = {
+  status: 'online',
+  service: 'Nitin Chatbot Backend',
+  version: '1.0.0',
+};
+
+app.get('/',       (_req, res) => res.json(healthResponse));
+app.get('/health', (_req, res) => res.json(healthResponse));
 
 // ─── Chat endpoint ─────────────────────────────────────────────
 app.post('/api/chat', async (req, res) => {
@@ -251,17 +259,30 @@ app.post('/api/chat', async (req, res) => {
       }
     }
 
-    // Start chat with history
-    const chat = model.startChat({
-      history,
-      generationConfig: {
-        maxOutputTokens: 600,
-        temperature: 0.6,
-      },
-    });
+    const genConfig = { maxOutputTokens: 600, temperature: 0.6 };
 
-    const result = await chat.sendMessage(trimmed);
-    const reply = result.response.text();
+    // Helper: try a model, return reply or throw
+    async function tryModel(modelName) {
+      const chat = getModel(modelName).startChat({ history, generationConfig: genConfig });
+      const result = await chat.sendMessage(trimmed);
+      return result.response.text();
+    }
+
+    let reply;
+    try {
+      reply = await tryModel(PRIMARY_MODEL);
+    } catch (primaryErr) {
+      const msg = primaryErr.message || '';
+      const isOverloaded = msg.includes('503') || msg.includes('overloaded') ||
+                           msg.includes('high demand') || msg.includes('unavailable') ||
+                           msg.includes('not found') || msg.includes('404');
+      if (isOverloaded) {
+        console.warn(`[Fallback] Primary model (${PRIMARY_MODEL}) failed, trying ${FALLBACK_MODEL}`);
+        reply = await tryModel(FALLBACK_MODEL);
+      } else {
+        throw primaryErr; // re-throw non-overload errors
+      }
+    }
 
     res.json({ reply });
 
@@ -276,9 +297,14 @@ app.post('/api/chat', async (req, res) => {
       return res.status(400).json({ error: 'Your message was flagged by safety filters. Please rephrase.' });
     }
 
+    if (err.message?.includes('503') || err.message?.includes('overloaded') || err.message?.includes('high demand')) {
+      return res.status(503).json({ error: 'AI service is busy right now. Please try again in a moment.' });
+    }
+
     res.status(500).json({ error: 'Something went wrong. Please try again in a moment.' });
   }
 });
+
 
 // ─── 404 handler ───────────────────────────────────────────────
 app.use((req, res) => {

@@ -2,14 +2,10 @@
 //  Nitin Choudri Portfolio – AI Chatbot
 // =====================================================
 //
-//  IMPORTANT: After deploying the backend to Render,
-//  replace the URL below with your actual Render URL.
-//  e.g. 'https://nitin-chatbot.onrender.com'
+//  PRODUCTION:  'https://nitin-chatbot.onrender.com'
+//  LOCAL DEV:   'http://localhost:3001'
 //
-//  For local testing with the backend running:
-//  change to 'http://localhost:3001'
-//
-const BACKEND_URL = 'http://172.20.10.2:3001';
+const BACKEND_URL = 'https://nitin-chatbot.onrender.com';
 // =====================================================
 
 const SUGGESTED_QUESTIONS = [
