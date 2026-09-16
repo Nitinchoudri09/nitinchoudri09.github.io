@@ -49,7 +49,7 @@ class PortfolioChatbot {
       <button class="chatbot-toggle" id="chatbotToggle"
         aria-label="Open AI Portfolio Assistant"
         title="Ask me about Nitin">
-        <i class="fas fa-robot chatbot-icon-open" aria-hidden="true"></i>
+        <i class="fas fa-user-astronaut chatbot-icon-open" aria-hidden="true"></i>
         <i class="fas fa-times chatbot-icon-close" aria-hidden="true"></i>
         <span class="chatbot-badge" aria-hidden="true">AI</span>
       </button>
@@ -65,7 +65,7 @@ class PortfolioChatbot {
         <div class="chatbot-header">
           <div class="chatbot-header-info">
             <div class="chatbot-avatar" aria-hidden="true">
-              <i class="fas fa-robot"></i>
+              <i class="fas fa-user-astronaut"></i>
               <span class="chatbot-status-dot"></span>
             </div>
             <div>
