@@ -9,7 +9,7 @@
 //  For local testing with the backend running:
 //  change to 'http://localhost:3001'
 //
-const BACKEND_URL = 'http://localhost:3001';
+const BACKEND_URL = 'http://172.20.10.2:3001';
 // =====================================================
 
 const SUGGESTED_QUESTIONS = [

@@ -26,6 +26,12 @@ const allowedOrigins = [
   'http://127.0.0.1:5503',
   'http://localhost:5504',
   'http://127.0.0.1:5504',
+  // Local network – mobile devices on same WiFi
+  'http://172.20.10.2:5500',
+  'http://172.20.10.2:5501',
+  'http://172.20.10.2:5502',
+  'http://172.20.10.2:5503',
+  'http://172.20.10.2:5504',
 ];
 
 app.use(cors({
