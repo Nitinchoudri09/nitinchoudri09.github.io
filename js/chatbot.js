@@ -1,4 +1,4 @@
-﻿// =====================================================
+// =====================================================
 //  Nitin Choudri Portfolio – AI Chatbot
 // =====================================================
 //
@@ -9,7 +9,7 @@
 //  For local testing with the backend running:
 //  change to 'http://localhost:3001'
 //
-const BACKEND_URL = 'https://nitin-chatbot.onrender.com';
+const BACKEND_URL = 'http://localhost:3001';
 // =====================================================
 
 const SUGGESTED_QUESTIONS = [

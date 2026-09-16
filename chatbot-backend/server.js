@@ -1,4 +1,4 @@
-﻿require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -20,6 +20,12 @@ const allowedOrigins = [
   'http://127.0.0.1:5500',
   'http://localhost:5501',
   'http://127.0.0.1:5501',
+  'http://localhost:5502',
+  'http://127.0.0.1:5502',
+  'http://localhost:5503',
+  'http://127.0.0.1:5503',
+  'http://localhost:5504',
+  'http://127.0.0.1:5504',
 ];
 
 app.use(cors({
@@ -196,7 +202,7 @@ CAREER INTERESTS:
 // ─── Initialize Gemini ────────────────────────────────────────
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-  model: 'gemini-1.5-flash',
+  model: 'gemini-3.6-flash',
   systemInstruction: SYSTEM_PROMPT,
 });
 
