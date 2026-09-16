@@ -213,7 +213,7 @@ function getModel(modelName) {
 }
 
 // Primary model, fallback if primary is overloaded
-const PRIMARY_MODEL   = 'gemini-2.0-flash-lite';
+const PRIMARY_MODEL   = 'gemini-3.5-flash-lite';
 const FALLBACK_MODEL  = 'gemini-3.6-flash';
 
 // ─── Health check ──────────────────────────────────────────────
