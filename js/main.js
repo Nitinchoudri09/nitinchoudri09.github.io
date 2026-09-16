@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
        2. Typing Text Effect
     ----------------------------------------------- */
     const typingText = document.querySelector('.typing-text');
-    const words = ["Python Developer", "AI & Data Science Engineer", "Data Analyst", "Testing Engineer"];
+    const words = ["Python Developer","Full Stack Developer", "AI Engineer", "QA Testing Engineer"];
     let wordIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
