@@ -111,7 +111,7 @@ WORK EXPERIENCE:
 
 1. AI and Data Science Engineer
    Company: Sirpi Products And Services Private Limited
-   Duration: 2026 – Present
+   Duration: 2026 – Aug 2026
    Responsibilities:
    • Built ML models for predictive analysis using Python
    • Worked with Pandas, NumPy, Scikit-learn, Matplotlib
