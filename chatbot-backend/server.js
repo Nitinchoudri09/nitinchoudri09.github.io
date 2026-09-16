@@ -109,9 +109,21 @@ CERTIFICATIONS:
 
 WORK EXPERIENCE:
 
-1. AI and Data Science Engineer
+1. QA Software Testing Engineer
+   Company: Shout Networking Private Limited
+   Duration: 2026 – Present
+   Responsibilities:
+   • Ensuring the quality and reliability of the Connect Karo mobile application
+   • Hands-on experience in manual testing, test case design, and bug identification
+   • Cross-platform testing across Android and iOS devices
+   • Tested key features: Feed Posting, Battles, Messaging, and Chat Rooms
+   • Identified, documented, and reported bugs with clear steps to reproduce
+   • Collaborated with developers to verify bug fixes and improve app quality
+   Skills used: Manual Testing, Software Testing, Test Case Design, Bug Reporting, Android/iOS Testing, Quality Assurance, Mobile App Testing
+
+2. AI and Data Science Engineer
    Company: Sirpi Products And Services Private Limited
-   Duration: 2026 – Aug 2026
+   Duration: Apr 2026 – Aug 2026
    Responsibilities:
    • Built ML models for predictive analysis using Python
    • Worked with Pandas, NumPy, Scikit-learn, Matplotlib
@@ -121,7 +133,7 @@ WORK EXPERIENCE:
    • Collaborated on end-to-end ML projects from data collection to model deployment
    Skills used: Python, Machine Learning, Data Analysis, Data Visualization, Pandas, NumPy, Scikit-learn, Matplotlib
 
-2. Python & Machine Learning Intern
+3. Python & Machine Learning Intern
    Company: Karunadu Technologies Pvt Ltd – Bangalore, India
    Duration: Feb 2026 – June 2026
    Responsibilities:
