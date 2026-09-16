@@ -835,6 +835,80 @@ ul {
     text-transform: uppercase;
 }
 
+.hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(168, 85, 247, 0.12);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    color: #f5d7ff;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.12);
+}
+
+.hero-badge.soft {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.28);
+    color: #dfe7ff;
+}
+
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(110px, 1fr));
+    gap: 16px;
+    max-width: 540px;
+    margin-top: 30px;
+}
+
+.stat-card {
+    position: relative;
+    padding: 18px 16px;
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.56);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.14), rgba(99, 102, 241, 0.08), transparent 70%);
+    z-index: 0;
+}
+
+.stat-card strong,
+.stat-card span {
+    position: relative;
+    z-index: 1;
+    display: block;
+}
+
+.stat-card strong {
+    font-size: 1.4rem;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.stat-card span {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
 .name {
     font-size: clamp(3rem, 10vw, 6rem);
     font-weight: 900;
