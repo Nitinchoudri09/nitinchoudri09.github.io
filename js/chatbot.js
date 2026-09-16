@@ -279,7 +279,8 @@ class PortfolioChatbot {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 20000);
+      // Increase timeout to 60 seconds (Render free tier can take up to 50s to wake up from sleep)
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
 
       const res = await fetch(`${BACKEND_URL}/api/chat`, {
         method: 'POST',
