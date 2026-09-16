@@ -2,10 +2,10 @@
 //  Nitin Choudri Portfolio – AI Chatbot
 // =====================================================
 //
-//  PRODUCTION:  'https://nitin-chatbot.onrender.com'
+//  PRODUCTION:  'https://nitinchoudri09-github-io.onrender.com'
 //  LOCAL DEV:   'http://localhost:3001'
 //
-const BACKEND_URL = 'https://nitin-chatbot.onrender.com';
+const BACKEND_URL = 'https://nitinchoudri09-github-io.onrender.com';
 // =====================================================
 
 const SUGGESTED_QUESTIONS = [

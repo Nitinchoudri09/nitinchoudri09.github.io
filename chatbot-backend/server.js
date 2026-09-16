@@ -14,6 +14,7 @@ app.use(express.json({ limit: '10kb' }));
 
 // ─── CORS ─────────────────────────────────────────────────────
 // Production origin: https://nitinchoudri09.github.io
+// Render service:    https://nitinchoudri09-github-io.onrender.com
 // Dev origins: localhost variants for Live Server
 const allowedOrigins = [
   'https://nitinchoudri09.github.io',
