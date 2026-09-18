@@ -353,9 +353,9 @@ class PortfolioChatbot {
     text = text.replace(/(<li>[\s\S]*?<\/li>)(\n<li>|$)/g, (m) => m);
     text = text.replace(/((?:<li>.*?<\/li>\n?)+)/g, '<ul>$1</ul>');
 
-    // Clickable links
+    // Clickable links (strip trailing punctuation like ) . , that aren't part of the URL)
     text = text.replace(
-      /(https?:\/\/[^\s<"]+)/g,
+      /(https?:\/\/[^\s<"')\]]+)/g,
       '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
     );
 

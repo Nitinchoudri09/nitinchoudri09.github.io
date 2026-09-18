@@ -96,7 +96,7 @@ EDUCATION:
 TECHNICAL SKILLS:
 • Languages: Python, C, SQL, JavaScript
 • Web Technologies: HTML5, CSS3, Django, Flask, React, Next.js
-• AI / Machine Learning: Machine Learning, NLP, Scikit-learn, Pandas, NumPy, Matplotlib
+• AI / Machine Learning: Machine Learning, NLP, Scikit-learn, Pandas, NumPy, Matplotlib, LangChain, RAG
 • Databases: MySQL, PostgreSQL
 • Backend / API: GraphQL, GraphQL Yoga, Prisma ORM, Bun runtime, Node.js, Express
 • DevOps & Tools: Git, GitHub, VS Code, Bootstrap, Power BI, Excel, Docker, JWT, Selenium, Jira
