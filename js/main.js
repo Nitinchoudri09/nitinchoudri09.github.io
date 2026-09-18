@@ -115,19 +115,165 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(type, 1500);
 
     /* -----------------------------------------------
-       2.5 Preloader Handling
+       2.5 Preloader Handling — Animated 0% to 100%
     ----------------------------------------------- */
+
+    // --- Particle System ---
+    (function initParticles() {
+        const canvas = document.getElementById('loader-particles');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animId;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function createParticle() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2.5 + 0.5,
+                speedX: (Math.random() - 0.5) * 0.6,
+                speedY: (Math.random() - 0.5) * 0.6,
+                opacity: Math.random() * 0.5 + 0.1,
+                pulse: Math.random() * Math.PI * 2,
+                color: Math.random() > 0.5
+                    ? `rgba(168, 85, 247, OPACITY)`
+                    : `rgba(0, 210, 255, OPACITY)`
+            };
+        }
+
+        for (let i = 0; i < 60; i++) {
+            particles.push(createParticle());
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.pulse += 0.02;
+
+                // Wrap around screen
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+
+                const flicker = Math.sin(p.pulse) * 0.2 + 0.8;
+                const alpha = p.opacity * flicker;
+                const color = p.color.replace('OPACITY', alpha.toFixed(2));
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = color;
+                ctx.fill();
+            });
+
+            // Draw faint connection lines between close particles
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(168, 85, 247, ${(1 - dist / 120) * 0.12})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            animId = requestAnimationFrame(drawParticles);
+        }
+        drawParticles();
+
+        // Expose cleanup for after preloader hides
+        window._stopLoaderParticles = () => {
+            cancelAnimationFrame(animId);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        };
+    })();
+
+    // --- Percentage Counter + Glow ---
     window.addEventListener('load', () => {
         const preloader = document.querySelector('.preloader');
-        setTimeout(() => {
-            preloader.classList.add('fade-out');
-            document.body.classList.add('loaded');
+        const percentEl = document.getElementById('loader-percentage');
+        const progressBar = document.getElementById('loader-progress-bar');
+        const glowRing = document.getElementById('loader-glow-ring');
+        const orbits = document.querySelectorAll('.loader-orbit');
+        let current = 0;
+        const target = 100;
+        const totalDuration = 2800;
+        const steps = target;
+        let step = 0;
 
-            // Re-trigger scroll reveal for hero section specifically
-            setTimeout(() => {
-                document.querySelector('.hero').classList.add('active');
-            }, 400);
-        }, 800); // Artificial delay for premium feel
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function tick() {
+            step++;
+            const progress = Math.min(step / steps, 1);
+            const easedProgress = easeOutCubic(progress);
+            current = Math.round(easedProgress * target);
+
+            percentEl.textContent = current;
+            progressBar.style.width = current + '%';
+
+            // Intensify glow ring as percentage increases
+            if (glowRing) {
+                const glowIntensity = current / 100;
+                const glowSize = 30 + glowIntensity * 40;
+                const glowSpread = 60 + glowIntensity * 60;
+                glowRing.style.boxShadow = `0 0 ${glowSize}px rgba(168, 85, 247, ${0.2 + glowIntensity * 0.4}), 0 0 ${glowSpread}px rgba(168, 85, 247, ${0.1 + glowIntensity * 0.2})`;
+            }
+
+            // Speed up orbits as we approach 100
+            orbits.forEach((orbit, i) => {
+                const speedMultiplier = 1 + (current / 100) * 1.5;
+                const baseDuration = [3, 2.5, 2][i] || 2;
+                orbit.style.animationDuration = (baseDuration / speedMultiplier) + 's';
+            });
+
+            if (current < target) {
+                const delay = totalDuration / steps;
+                setTimeout(tick, delay);
+            } else {
+                // Hit 100% — flash glow, then reveal
+                if (glowRing) {
+                    glowRing.style.boxShadow = '0 0 80px rgba(168, 85, 247, 0.8), 0 0 150px rgba(0, 210, 255, 0.4)';
+                    glowRing.style.transform = 'scale(1.6)';
+                }
+
+                setTimeout(() => {
+                    preloader.classList.add('fade-out');
+                    document.body.classList.add('loaded');
+
+                    // Stop particles after transition
+                    if (window._stopLoaderParticles) {
+                        setTimeout(window._stopLoaderParticles, 1300);
+                    }
+
+                    setTimeout(() => {
+                        document.querySelector('.hero').classList.add('active');
+                    }, 400);
+                }, 500);
+            }
+        }
+
+        // Small initial delay before the count begins
+        setTimeout(tick, 300);
     });
 
 

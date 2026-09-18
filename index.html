@@ -30,9 +30,30 @@
 
     <!-- Preloader -->
     <div class="preloader">
+        <!-- Floating particles canvas -->
+        <canvas id="loader-particles"></canvas>
+
         <div class="loader-content">
-            <div class="loader-circle"></div>
-            <div class="loader-text">Nitin Choudri<span>.</span></div>
+            <!-- Animated orbital rings -->
+            <div class="loader-orbit-container">
+                <div class="loader-orbit loader-orbit-1"></div>
+                <div class="loader-orbit loader-orbit-2"></div>
+                <div class="loader-orbit loader-orbit-3"></div>
+                <div class="loader-glow-ring" id="loader-glow-ring"></div>
+                <div class="loader-percentage" id="loader-percentage">0</div>
+            </div>
+
+            <div class="loader-progress-track">
+                <div class="loader-progress-bar" id="loader-progress-bar">
+                    <div class="loader-progress-glow"></div>
+                </div>
+            </div>
+
+            <div class="loader-text">
+                <span class="loader-letter">N</span><span class="loader-letter">i</span><span class="loader-letter">t</span><span class="loader-letter">i</span><span class="loader-letter">n</span>
+                <span class="loader-letter">&nbsp;</span>
+                <span class="loader-letter">C</span><span class="loader-letter">h</span><span class="loader-letter">o</span><span class="loader-letter">u</span><span class="loader-letter">d</span><span class="loader-letter">r</span><span class="loader-letter">i</span><span class="loader-dot">.</span>
+            </div>
         </div>
     </div>
 
